@@ -1,4 +1,3 @@
-````markdown
 # Ocean Infrastructure Intelligence Platform (OIIP)
 
 > Open-source geospatial intelligence platform for ocean energy, marine infrastructure, oceanographic analytics, and AI datacenter site selection.
@@ -358,4 +357,3 @@ https://github.com/ocean-infrastructure-intelligence
 ## Mission Statement
 
 Building open tools and intelligence systems for sustainable ocean infrastructure, renewable energy, and the future of AI-powered maritime development.
-````
