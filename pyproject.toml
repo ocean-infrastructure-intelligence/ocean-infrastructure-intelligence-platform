@@ -1,0 +1,9 @@
+[project]
+name = "ocean-infrastructure-intelligence-platform"
+version = "0.1.0"
+description = "Open-source geospatial intelligence platform for ocean energy, marine infrastructure, and AI datacenter site selection."
+requires-python = ">=3.13"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
