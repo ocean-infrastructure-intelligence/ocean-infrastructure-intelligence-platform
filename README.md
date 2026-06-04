@@ -17,45 +17,19 @@ The Ocean Infrastructure Intelligence Platform (OIIP) aims to provide an open-so
 
 The platform is designed to help researchers, engineers, investors, policymakers, and climate-tech innovators identify and evaluate opportunities for:
 
-- Ocean Thermal Energy Conversion (OTEC)
-- Offshore Renewable Energy
-- AI Datacenter Site Selection
-- Submarine Cable Infrastructure
-- Maritime Logistics
-- Ocean Infrastructure Development
-- Climate Technology Projects
+* Ocean Thermal Energy Conversion (OTEC)
+* Offshore Renewable Energy
+* AI Datacenter Site Selection
+* Submarine Cable Infrastructure
+* Maritime Logistics
+* Ocean Infrastructure Development
+* Climate Technology Projects
 
 ---
 
-## Key Objectives
+## Mission
 
-### Ocean Energy
-
-- Analyze OTEC potential
-- Evaluate thermal gradients
-- Assess offshore renewable energy opportunities
-- Model power generation scenarios
-
-### Ocean Infrastructure
-
-- Map submarine cable networks
-- Analyze coastal infrastructure
-- Evaluate port accessibility
-- Assess grid connectivity
-
-### Ocean Intelligence
-
-- Integrate oceanographic datasets
-- Analyze bathymetry
-- Study ocean currents
-- Evaluate environmental constraints
-
-### AI Datacenter Intelligence
-
-- Identify suitable locations for AI-ready infrastructure
-- Evaluate cooling potential
-- Assess connectivity and power availability
-- Model long-term operational costs
+Build open tools, datasets, and intelligence systems that help researchers, engineers, organizations, and governments better understand and develop sustainable ocean infrastructure.
 
 ---
 
@@ -79,36 +53,76 @@ AI Infrastructure
 Ocean Intelligence
 ```
 
+Each layer contributes information used to evaluate candidate locations for future ocean infrastructure development.
+
+---
+
+## Key Objectives
+
+### Ocean Energy
+
+* Analyze OTEC potential
+* Evaluate thermal gradients
+* Assess offshore renewable energy opportunities
+* Model power generation scenarios
+
+### Ocean Infrastructure
+
+* Map submarine cable networks
+* Analyze coastal infrastructure
+* Evaluate port accessibility
+* Assess grid connectivity
+
+### Ocean Intelligence
+
+* Integrate oceanographic datasets
+* Analyze bathymetry
+* Study ocean currents
+* Evaluate environmental constraints
+
+### AI Datacenter Intelligence
+
+* Identify suitable locations for AI-ready infrastructure
+* Evaluate cooling potential
+* Assess connectivity and power availability
+* Model long-term operational costs
+
 ---
 
 ## Architecture
 
 ```text
-Data Providers
-    │
-    ├── Copernicus Marine
-    ├── NOAA
-    ├── GEBCO
-    ├── AIS
-    ├── OpenStreetMap
-    ├── IBTrACS
-    └── Infrastructure Sources
-            │
-            ▼
-      Processing Layer
-            │
-            ▼
-          PostGIS
-            │
-            ▼
-    Analytics & Scoring
-            │
-            ▼
-        API Layer
-            │
-            ▼
-      Web Dashboard
+External Data Sources
+        │
+        ▼
+ Data Providers
+        │
+        ▼
+ Processing Pipelines
+        │
+        ▼
+ Spatial Database
+    (PostGIS)
+        │
+        ├── Analytics Engine
+        ├── Scoring Engine
+        ├── Economic Models
+        └── AI Agents
+                │
+                ▼
+            API Layer
+                │
+                ▼
+          Web Dashboard
 ```
+
+### Architecture Documentation
+
+| Document                                                                     | Description                                 |
+| ---------------------------------------------------------------------------- | ------------------------------------------- |
+| [ARCHITECTURE.md](ARCHITECTURE.md)                                           | Platform architecture overview              |
+| [docs/architecture/system-overview.md](docs/architecture/system-overview.md) | High-level technical specification          |
+| [docs/architecture/erd.md](docs/architecture/erd.md)                         | PostGIS data model and entity relationships |
 
 ---
 
@@ -116,43 +130,51 @@ Data Providers
 
 ### Oceanography
 
-- Sea Surface Temperature (SST)
-- Deep Water Temperature
-- Thermal Profiles
-- Salinity
-- Ocean Currents
-- Waves
+* Sea Surface Temperature (SST)
+* Deep Water Temperature
+* Thermal Profiles
+* Salinity
+* Ocean Currents
+* Waves
+* Bathymetry
 
 ### Energy
 
-- OTEC Modeling
-- Offshore Wind
-- Wave Energy
-- Hybrid Systems
+* OTEC Modeling
+* Offshore Wind
+* Wave Energy
+* Hybrid Energy Systems
 
 ### Infrastructure
 
-- Submarine Cables
-- Cable Landing Stations
-- Ports
-- Electrical Grid Assets
-- Logistics Infrastructure
+* Submarine Cables
+* Cable Landing Stations
+* Ports
+* Electrical Grid Assets
+* Logistics Infrastructure
 
 ### Risk Analysis
 
-- Cyclones
-- Tsunami Risk
-- Shipping Density
-- Seismic Activity
+* Cyclones
+* Tsunami Risk
+* Shipping Density
+* Seismic Activity
 
 ### Economics
 
-- CAPEX
-- OPEX
-- NPV
-- IRR
-- LCOE
-- Monte Carlo Simulation
+* CAPEX
+* OPEX
+* NPV
+* IRR
+* LCOE
+* Monte Carlo Simulation
+
+### AI Infrastructure
+
+* AI Datacenter Suitability Index (ADCSI)
+* Cooling Potential Assessment
+* Connectivity Analysis
+* Infrastructure Readiness Evaluation
 
 ---
 
@@ -162,13 +184,13 @@ One of the primary goals of OIIP is the development of the AI Datacenter Suitabi
 
 ADCSI evaluates locations based on:
 
-- Energy availability
-- Ocean cooling potential
-- Connectivity
-- Cable proximity
-- Infrastructure readiness
-- Environmental risk
-- Logistics accessibility
+* Energy Availability
+* Ocean Cooling Potential
+* Connectivity
+* Cable Proximity
+* Infrastructure Readiness
+* Environmental Risk
+* Logistics Accessibility
 
 The objective is to identify optimal locations for future AI infrastructure powered by sustainable ocean-based energy systems.
 
@@ -178,136 +200,211 @@ The objective is to identify optimal locations for future AI infrastructure powe
 
 ### Backend
 
-- Python 3.13+
-- FastAPI
-- SQLAlchemy
-- PostgreSQL
-- PostGIS
-- Redis
+* Python 3.13+
+* FastAPI
+* SQLAlchemy
+* PostgreSQL
+* PostGIS
+* Redis
 
 ### Scientific Computing
 
-- NumPy
-- SciPy
-- Pandas
-- Xarray
-- Dask
+* NumPy
+* SciPy
+* Pandas
+* Xarray
+* Dask
 
 ### Geospatial
 
-- GeoPandas
-- GDAL
-- Shapely
-- PyProj
+* GeoPandas
+* GDAL
+* Shapely
+* PyProj
 
 ### Frontend
 
-- Qwik
-- TypeScript
-- Leaflet
-- MapLibre
+* Qwik
+* TypeScript
+* Leaflet
+* MapLibre
 
 ### Infrastructure
 
-- Docker
-- GitHub Actions
-- Terraform
+* Docker
+* GitHub Actions
+* Terraform
 
 ### AI & Agents
 
-- OpenAI SDK
-- LangGraph
-- MCP
-- Agent-to-Agent (A2A)
+* OpenAI SDK
+* LangGraph
+* MCP
+* Agent-to-Agent (A2A)
 
 ---
 
 ## Repository Structure
 
 ```text
-backend/
-frontend/
-database/
-docs/
-infra/
-data/
-tests/
-scripts/
+.
+├── backend/
+│   ├── api/
+│   ├── providers/
+│   ├── analytics/
+│   ├── scoring/
+│   ├── economics/
+│   └── agents/
+│
+├── frontend/
+│   ├── src/
+│   ├── components/
+│   ├── maps/
+│   └── routes/
+│
+├── database/
+│   ├── migrations/
+│   ├── schemas/
+│   └── seeds/
+│
+├── docs/
+│   └── architecture/
+│
+├── infra/
+│   ├── docker/
+│   ├── terraform/
+│   └── kubernetes/
+│
+├── data/
+│   ├── raw/
+│   ├── processed/
+│   └── exports/
+│
+├── notebooks/
+├── scripts/
+├── tests/
+└── .github/
 ```
 
-Detailed architecture documentation can be found in:
+See:
 
-```text
-docs/architecture/
-```
+* [ARCHITECTURE.md](ARCHITECTURE.md)
+* [docs/architecture/system-overview.md](docs/architecture/system-overview.md)
+* [docs/architecture/erd.md](docs/architecture/erd.md)
+
+---
+
+## Project Documentation
+
+### Getting Started
+
+* [README.md](README.md)
+* [ROADMAP.md](ROADMAP.md)
+* [SUPPORT.md](SUPPORT.md)
+
+### Community
+
+* [CONTRIBUTING.md](CONTRIBUTING.md)
+* [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+* [GOVERNANCE.md](GOVERNANCE.md)
+
+### Security
+
+* [SECURITY.md](SECURITY.md)
+
+### Architecture
+
+* [ARCHITECTURE.md](ARCHITECTURE.md)
+* [docs/architecture/system-overview.md](docs/architecture/system-overview.md)
+* [docs/architecture/erd.md](docs/architecture/erd.md)
 
 ---
 
 ## Initial Geographic Focus
 
-Phase 1 focuses on Southeast Asia:
+### Phase 1
 
-- Thailand
-- Andaman Sea
-- Gulf of Thailand
+Primary research region:
 
-Future phases may expand to:
+* Thailand
+* Gulf of Thailand
+* Andaman Sea
 
-- Indonesia
-- Philippines
-- Pacific Islands
-- Global Tropical Ocean Belt
+### Phase 2
+
+Regional expansion:
+
+* Indonesia
+* Philippines
+* Vietnam
+* Malaysia
+
+### Phase 3
+
+Global tropical ocean coverage:
+
+* Pacific Ocean
+* Indian Ocean
+* Atlantic Ocean
+* Caribbean Region
+
+---
+
+## Current Research Focus
+
+The project currently prioritizes research related to:
+
+* Thailand OTEC opportunities
+* Gulf of Thailand thermal gradients
+* Andaman Sea energy potential
+* Offshore infrastructure mapping
+* Submarine cable connectivity
+* AI datacenter site selection
+* Ocean-based cooling systems
+
+The initial goal is to identify and evaluate candidate locations for sustainable ocean infrastructure development in Southeast Asia.
 
 ---
 
 ## Roadmap
 
-### Phase 1
+The long-term development plan is maintained in:
 
-- Data acquisition pipeline
-- PostGIS foundation
-- Thailand OTEC research
-- Initial scoring engine
+* [ROADMAP.md](ROADMAP.md)
 
-### Phase 2
+Current priorities include:
 
-- OTEC candidate identification
-- Infrastructure analysis
-- Risk assessment
-
-### Phase 3
-
-- AI Datacenter Suitability Index
-- Economic modeling
-- Monte Carlo simulations
-
-### Phase 4
-
-- Interactive GIS dashboard
-- AI research agents
-- Global ocean coverage
+* PostGIS foundation
+* Oceanographic data ingestion
+* Thailand OTEC research
+* Infrastructure intelligence
+* AI Datacenter Suitability Index (ADCSI)
+* Interactive GIS platform
 
 ---
 
-## Contributing
+## Community
 
-Contributions are welcome.
+We welcome contributions from:
 
-Areas where help is especially valuable:
+* Software Engineers
+* GIS Specialists
+* Oceanographers
+* Marine Engineers
+* Climate-Tech Researchers
+* Data Scientists
+* Infrastructure Analysts
+* Students and Open-Source Contributors
 
-- Oceanography
-- GIS and spatial analytics
-- Energy modeling
-- Infrastructure datasets
-- Scientific computing
-- Frontend visualization
-- Documentation
+Before contributing, please review:
 
-Please see:
+* [CONTRIBUTING.md](CONTRIBUTING.md)
+* [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+* [GOVERNANCE.md](GOVERNANCE.md)
 
-```text
-CONTRIBUTING.md
-```
+Questions and support:
+
+* [SUPPORT.md](SUPPORT.md)
 
 ---
 
@@ -315,22 +412,51 @@ CONTRIBUTING.md
 
 The project plans to integrate publicly available datasets from organizations such as:
 
-- Copernicus Marine Service
-- NOAA
-- GEBCO
-- OpenStreetMap
-- IBTrACS
-- National oceanographic institutions
+* Copernicus Marine Service
+* NOAA
+* GEBCO
+* OpenStreetMap
+* IBTrACS
+* National Oceanographic Institutions
 
 All dataset ownership remains with their respective providers.
 
 ---
 
+## Security
+
+Please review:
+
+* [SECURITY.md](SECURITY.md)
+
+Do not report security vulnerabilities through public GitHub Issues.
+
+Follow the responsible disclosure process described in the Security Policy.
+
+---
+
 ## Project Status
 
-OIIP is currently in the early development and research phase.
+Current Stage:
 
-The architecture, data model, and analytical framework are actively evolving.
+```text
+Phase 0 — Foundation
+```
+
+Completed:
+
+* Project vision and mission
+* Governance model
+* Community guidelines
+* Security policy
+* Initial architecture
+* Initial ERD design
+
+In Progress:
+
+* PostGIS schema implementation
+* Data provider framework
+* Thailand OTEC research MVP
 
 ---
 
@@ -356,4 +482,14 @@ https://github.com/ocean-infrastructure-intelligence
 
 ## Mission Statement
 
-Building open tools and intelligence systems for sustainable ocean infrastructure, renewable energy, and the future of AI-powered maritime development.
+Building open tools and intelligence systems for:
+
+* Ocean Infrastructure Intelligence
+* Ocean Thermal Energy Conversion (OTEC)
+* Offshore Renewable Energy
+* Marine Infrastructure Analytics
+* Oceanographic Data Integration
+* AI Datacenter Site Selection
+* Sustainable Ocean Development
+
+Together, we are building open science, open data, and open-source technology for the future of ocean infrastructure intelligence.
