@@ -377,6 +377,25 @@ Completed:
 Status:
 DONE
 
+## M1 — Core Site Domain Model Complete ✅
+
+- Site
+- Geometry(Point,4326)
+- GIST index
+- SiteStatus Enum
+- Validation
+- created_at
+- updated_at
+- description
+- country_code constraint
+- latitude property
+- longitude property
+- Site ORM model
+- PostGIS POINT geometry
+- Lifecycle enum
+- Country code validation
+- Server-side timestamps
+- Geometry helper properties (latitude/longitude)
 ---
 
 # Future Research Areas
