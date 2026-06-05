@@ -358,6 +358,27 @@ Success Criteria:
 
 ---
 
+# Milestones
+
+## M0 — PostGIS Foundation Complete ✅
+
+Completed:
+
+- PostgreSQL 17 deployed
+- PostGIS 3.5 deployed
+- SQLAlchemy configured
+- Alembic configured
+- First migration created
+- Site entity implemented
+- Spatial geometry column enabled
+- First spatial record inserted
+- First PostGIS queries executed
+
+Status:
+DONE
+
+---
+
 # Future Research Areas
 
 Potential future expansion areas include:
