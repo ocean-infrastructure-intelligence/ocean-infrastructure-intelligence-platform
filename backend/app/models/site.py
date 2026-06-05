@@ -4,13 +4,11 @@ Contains SQLAlchemy ORM models for working with sites, their geographic coordina
 """
 
 import enum
-from typing import cast
 from datetime import datetime
 from sqlalchemy import Integer, String, DateTime, Enum, CheckConstraint, text
 from sqlalchemy.orm import Mapped, mapped_column, validates
 from geoalchemy2 import Geometry
 from geoalchemy2.shape import to_shape
-from shapely.geometry import Point
 from backend.app.core.base import Base
 
 
@@ -89,15 +87,14 @@ class Site(Base):
     def longitude(self) -> float | None:
         """Extract longitude (X) from the PostGIS spatial geometry object."""
         if self.geom is not None:
-            # Явно говорим линтеру: "Поверь мне, здесь будет Point"
-            point = cast(Point, to_shape(self.geom))
-            return point.x
+            shape = to_shape(self.geom)
+            return shape.x  # type: ignore
         return None
 
     @property
     def latitude(self) -> float | None:
         """Extract latitude (Y) from the PostGIS spatial geometry object."""
         if self.geom is not None:
-            point = cast(Point, to_shape(self.geom))
-            return point.y
+            shape = to_shape(self.geom)
+            return shape.y  # type: ignore
         return None
