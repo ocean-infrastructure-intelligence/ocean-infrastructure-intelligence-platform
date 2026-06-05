@@ -27,6 +27,24 @@ target_metadata = Base.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
+# Список системных таблиц PostGIS и TIGER Geocoder, которые нужно игнорировать
+IGNORED_TABLES = {
+    "spatial_ref_sys", "geography_columns", "geometry_columns", "raster_columns", "raster_overviews",
+    "topology", "layer", "state", "county", "tract", "bg", "tabblock", "zip_lookup", "zip_lookup_base",
+    "zip_lookup_all", "zip_state", "zip_state_loc", "place", "cousub", "edges", "addr", "faces",
+    "featnames", "addrfeat", "zcta5", "submcd", "state_lookup", "county_lookup", "place_lookup",
+    "countysub_lookup", "street_type_lookup", "direction_lookup", "secondary_unit_lookup",
+    "loader_lookuptables", "loader_variables", "loader_platform", "geocode_settings", 
+    "geocode_settings_default", "pagc_lex", "pagc_gaz", "pagc_rules", "tabblock20"
+}
+
+def include_object(object, name, type_, reflected, compare_to):
+    """Исключает системные таблицы и их индексы из процесса автогенерации."""
+    if type_ == "table" and name in IGNORED_TABLES:
+        return False
+    if type_ == "index" and name and name.startswith("idx_") and name.endswith("_geom"):
+        return False
+    return True
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
@@ -46,6 +64,7 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        include_object=include_object,
     )
 
     with context.begin_transaction():
@@ -67,7 +86,9 @@ def run_migrations_online() -> None:
 
     with connectable.connect() as connection:
         context.configure(
-            connection=connection, target_metadata=target_metadata
+            connection=connection, 
+            target_metadata=target_metadata, 
+            include_object=include_object,
         )
 
         with context.begin_transaction():

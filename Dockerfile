@@ -2,19 +2,11 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
-COPY . .
-
+COPY requirements.txt .
 RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-RUN pip install \
-    fastapi \
-    uvicorn \
-    sqlalchemy \
-    alembic \
-    psycopg[binary] \
-    geoalchemy2 \
-    pydantic-settings \
-    python-dotenv
+COPY . .
 
 CMD [
     "uvicorn",
