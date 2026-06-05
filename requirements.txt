@@ -6,3 +6,4 @@ psycopg[binary]
 geoalchemy2
 pydantic-settings
 python-dotenv
+shapely>=2.0.0

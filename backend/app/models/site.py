@@ -4,10 +4,13 @@ Contains SQLAlchemy ORM models for working with sites, their geographic coordina
 """
 
 import enum
+from typing import cast
 from datetime import datetime
 from sqlalchemy import Integer, String, DateTime, Enum, CheckConstraint, text
 from sqlalchemy.orm import Mapped, mapped_column, validates
 from geoalchemy2 import Geometry
+from geoalchemy2.shape import to_shape
+from shapely.geometry import Point
 from backend.app.core.base import Base
 
 
@@ -19,6 +22,7 @@ class SiteStatus(str, enum.Enum):
     VALIDATED = "VALIDATED"
     REJECTED = "REJECTED"
     SELECTED = "SELECTED"
+
 
 class Site(Base):
     """A site model for ocean infrastructure deployment.
@@ -35,22 +39,20 @@ class Site(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(255))
-    country_code: Mapped[str] = mapped_column(String(2))
 
-    # Note the spatial_index=False parameter.
-    # As we learned earlier, this will prevent Alembic from trying to create the GIST index again.
+    # Updated with index=True in the previous migration
+    country_code: Mapped[str] = mapped_column(String(2), index=True)
+
     geom = mapped_column(
         Geometry(geometry_type="POINT", srid=4326, spatial_index=False)
     )
 
-    # Description with a comment for the database
     description: Mapped[str | None] = mapped_column(
         String(1000),
         nullable=True,
         comment="OTEC candidate. Near deep-water coast. Fiber landing nearby.",
     )
 
-    # Status with Enum validation and lifecycle comment
     status: Mapped[SiteStatus] = mapped_column(
         Enum(SiteStatus, name="sitestatus", native_enum=True),
         nullable=False,
@@ -59,19 +61,16 @@ class Site(Base):
         comment="Lifecycle status: candidate, research, validated, rejected, selected",
     )
 
-    # Handled by PostgreSQL server-side using CURRENT_TIMESTAMP
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False,
         server_default=text("CURRENT_TIMESTAMP"),
     )
 
-    # Handled by PostgreSQL for creation, and Python lambda for updates
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False,
         server_default=text("CURRENT_TIMESTAMP"),
-        # onupdate вычисляется на стороне сервера БД при каждом обновлении строки
         onupdate=text("CURRENT_TIMESTAMP"),
     )
 
@@ -83,3 +82,22 @@ class Site(Base):
                 f"Country code '{value}' must be exactly 2 characters long (ISO 3166-1 alpha-2)."
             )
         return value.upper()
+
+    # --- СВОЙСТВА ГЕОМЕТРИИ ДЛЯ PYTHON / PYDANTIC ---
+
+    @property
+    def longitude(self) -> float | None:
+        """Extract longitude (X) from the PostGIS spatial geometry object."""
+        if self.geom is not None:
+            # Явно говорим линтеру: "Поверь мне, здесь будет Point"
+            point = cast(Point, to_shape(self.geom))
+            return point.x
+        return None
+
+    @property
+    def latitude(self) -> float | None:
+        """Extract latitude (Y) from the PostGIS spatial geometry object."""
+        if self.geom is not None:
+            point = cast(Point, to_shape(self.geom))
+            return point.y
+        return None
