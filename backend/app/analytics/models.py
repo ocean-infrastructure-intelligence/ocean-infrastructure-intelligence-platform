@@ -59,10 +59,29 @@ class SiteScore:
     overall_score: float
     grade: ScoreGrade
 
-
     def get_component_score(self, name: str) -> float | None:
         """Helper to quickly extract a specific score by its component name."""
         for comp in self.components:
             if comp.name == name:
                 return comp.score
         return None
+
+
+@dataclass(frozen=True)
+class BathymetryProfile:
+    """Distance profile from the site coordinate to key ocean depth contours (isobaths)."""
+
+    distance_to_500m_m: float  # Distance to 500m depth in meters
+    distance_to_1000m_m: float  # Distance to 1000m depth (critical for OTEC pipeline)
+    distance_to_1500m_m: float  # Distance to 1500m depth
+
+
+@dataclass(frozen=True)
+class SiteOtecAssessment:
+    """The core link tying a physical Site entity to its analytical and physics-based scores."""
+
+    site_id: int
+    site_name: str
+    physics_assessment: OtecAssessment
+    bathymetry_profile: BathymetryProfile
+    investment_score: SiteScore
