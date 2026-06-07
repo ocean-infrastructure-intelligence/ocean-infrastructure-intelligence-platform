@@ -139,3 +139,25 @@ class OtecSuitabilityReport:
     seasonal_stability_factor: float
     overall_investment_index: float
     final_investment_grade: ScoreGrade
+
+
+@dataclass(frozen=True)
+class AiDatacenterProfile:
+    """Requirements and constraints for co-locating an AI Compute Cluster with OTEC."""
+
+    target_compute_power_mw: float # Planned data center capacity (e.g. 50 MW)
+    distance_to_backbone_pop_km: (
+        float  # Distance to the nearest backbone network (affects latency)
+    )
+    required_pue_limit: (
+        float  # Maximum allowable PUE according to investor specifications (e.g., 1.2)
+    )
+
+
+@dataclass(frozen=True)
+class AiDatacenterAssessment:
+    """Computed thermodynamic and network metrics for the AI host component."""
+
+    achievable_pue: float  # Calculated PUE taking into account OTEC ice water
+    cooling_energy_savings_pct: float  # Calculated energy savings on cooling in %
+    network_latency_penalty: float  # Penalty for distance from the network node (0.0 - 1.0)
