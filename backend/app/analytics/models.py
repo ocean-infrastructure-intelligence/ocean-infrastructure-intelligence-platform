@@ -85,3 +85,41 @@ class SiteOtecAssessment:
     physics_assessment: OtecAssessment
     bathymetry_profile: BathymetryProfile
     investment_score: SiteScore
+
+
+@dataclass(frozen=True)
+class MonthlyThermalObservation:
+    """Thermal parameters captured for a specific month (1-12)."""
+
+    month: int
+    surface_temperature_c: float
+
+
+@dataclass(frozen=True)
+class HydroclimatologyProfile:
+    """Historical seasonal temperature profile aggregated from Copernicus/NOAA."""
+
+    deep_temperature_c: (
+        float  # Temperature at depth (usually stable all year round, ~4-5°C)
+    )
+    deep_water_depth_m: float  # Deep water depth
+    monthly_observations: List[
+        MonthlyThermalObservation
+    ]  # Historical profile for 12 months
+
+    def get_worst_month_profile(self) -> TemperatureProfile:
+        """Extracts the profile with the minimum surface temperature 
+        (worst-case design scenario)."""
+        if not self.monthly_observations:
+            raise ValueError(
+                "Hydroclimatology profile must contain monthly observations."
+            )
+
+        worst_obs = min(
+            self.monthly_observations, key=lambda x: x.surface_temperature_c
+        )
+        return TemperatureProfile(
+            surface_temperature_c=worst_obs.surface_temperature_c,
+            deep_temperature_c=self.deep_temperature_c,
+            deep_water_depth_m=self.deep_water_depth_m,
+        )

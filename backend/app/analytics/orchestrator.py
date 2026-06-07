@@ -1,7 +1,7 @@
 """Orchestrates pure domain entities, bathymetry constraints, and MCDA scoring rules."""
 
 from backend.app.analytics.models import (
-    TemperatureProfile,
+    HydroclimatologyProfile,
     BathymetryProfile,
     ScoreComponent,
     SiteOtecAssessment,
@@ -18,34 +18,43 @@ class SiteIntelligenceOrchestrator:
     MIN_VIABLE_DELTA_T: float = 20.0
     EXCELLENT_DELTA_T: float = 24.0
 
+    # Замените метод evaluate_site в backend/app/analytics/orchestrator.py
+
     @classmethod
-    def evaluate_site(
+    def evaluate_site_climatology(
         cls,
         site_id: int,
         site_name: str,
-        thermal_profile: TemperatureProfile,
+        hydro_profile: HydroclimatologyProfile,
         bathymetry_profile: BathymetryProfile,
         base_cable_score: float,
         base_risk_score: float,
     ) -> SiteOtecAssessment:
-        """Execute cross-layer analytics to compile a comprehensive SiteOtecAssessment."""
-        # 1. Calculate the pure thermodynamic physics
-        physics = OtecAnalysisService.analyze_profile(thermal_profile)
+        """Execute seasonal climate-aware analytics to compile SiteOtecAssessment."""
+
+        # 1. Extract the worst-case scenario (conservative engineering approach for OTEC)
+        worst_case_profile = hydro_profile.get_worst_month_profile()
+        physics = OtecAnalysisService.analyze_profile(worst_case_profile)
 
         # 2. Calculate the spatial bathymetric penalty for logistics
         spatial_logistics_score = BathymetryAnalysisService.calculate_distance_score(
             bathymetry_profile
         )
 
-        # 3. Modify the thermal score based on the delta T
-        # Normalize the delta from 20°C (0.0) to 24°C (1.0)
+        # 3. Thermal score based on the worst month + seasonal stability coefficient
         thermal_range = cls.EXCELLENT_DELTA_T - cls.MIN_VIABLE_DELTA_T
         raw_thermal_score = (physics.delta_t_c - cls.MIN_VIABLE_DELTA_T) / thermal_range
-        normalized_thermal_score = max(0.0, min(1.0, raw_thermal_score))
 
-        # 4. Form the components for the MCDA engine
+        stability_factor = OtecAnalysisService.evaluate_climatology_stability(
+            hydro_profile
+        )
+
+        # Integral thermal indicator with climate stability consideration
+        final_thermal_score = max(0.0, min(1.0, raw_thermal_score * stability_factor))
+
+        # 4. Form the components
         components = [
-            ScoreComponent(name="thermal", score=normalized_thermal_score, weight=0.40),
+            ScoreComponent(name="thermal", score=final_thermal_score, weight=0.40),
             ScoreComponent(
                 name="logistics", score=spatial_logistics_score, weight=0.25
             ),
@@ -53,7 +62,7 @@ class SiteIntelligenceOrchestrator:
             ScoreComponent(name="risk", score=base_risk_score, weight=0.20),
         ]
 
-        # 5. Calculate the integrated investment index
+        # 5. Calculate the index
         investment_score = SiteScoringService.compute_index(components)
 
         return SiteOtecAssessment(
