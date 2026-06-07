@@ -1,6 +1,10 @@
 """Analytical services processing oceanographic profiles into pure thermodynamic metrics."""
 
-from backend.app.analytics.models import TemperatureProfile, OtecAssessment
+from backend.app.analytics.models import (
+    HydroclimatologyProfile,
+    TemperatureProfile,
+    OtecAssessment,
+)
 
 
 class OtecAnalysisService:
@@ -38,3 +42,31 @@ class OtecAnalysisService:
             carnot_efficiency_pct=carnot_pct,
             net_efficiency_estimate_pct=net_pct,
         )
+
+    @classmethod
+    def evaluate_climatology_stability(
+        cls, hydro_profile: HydroclimatologyProfile
+    ) -> float:
+        """Compute thermal stability factor (0.0 to 1.0).
+
+        Fluctuations up to 2°C are considered perfect and carry no penalty.
+        """
+        temps = [
+            obs.surface_temperature_c for obs in hydro_profile.monthly_observations
+        ]
+        if not temps:
+            return 0.0
+
+        temp_delta_year = max(temps) - min(temps)
+
+        # If the fluctuations are within the normal range for the equatorial zone
+        if temp_delta_year <= 2.0:
+            return 1.0
+
+        # If the fluctuations are greater than 6°C, stability drops to zero
+        if temp_delta_year >= 6.0:
+            return 0.0
+
+        # Linear penalty only for the range from 2.0 to 6.0 degrees
+        normalized_penalty = (temp_delta_year - 2.0) / (6.0 - 2.0)
+        return round(1.0 - normalized_penalty, 2)

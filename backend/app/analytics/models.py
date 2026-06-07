@@ -85,3 +85,79 @@ class SiteOtecAssessment:
     physics_assessment: OtecAssessment
     bathymetry_profile: BathymetryProfile
     investment_score: SiteScore
+
+
+@dataclass(frozen=True)
+class MonthlyThermalObservation:
+    """Thermal parameters captured for a specific month (1-12)."""
+
+    month: int
+    surface_temperature_c: float
+
+
+@dataclass(frozen=True)
+class HydroclimatologyProfile:
+    """Historical seasonal temperature profile aggregated from Copernicus/NOAA."""
+
+    deep_temperature_c: (
+        float  # Temperature at depth (usually stable all year round, ~4-5°C)
+    )
+    deep_water_depth_m: float  # Deep water depth
+    monthly_observations: List[
+        MonthlyThermalObservation
+    ]  # Historical profile for 12 months
+
+    def get_worst_month_profile(self) -> TemperatureProfile:
+        """Extracts the profile with the minimum surface temperature
+        (worst-case design scenario)."""
+        if not self.monthly_observations:
+            raise ValueError(
+                "Hydroclimatology profile must contain monthly observations."
+            )
+
+        worst_obs = min(
+            self.monthly_observations, key=lambda x: x.surface_temperature_c
+        )
+        return TemperatureProfile(
+            surface_temperature_c=worst_obs.surface_temperature_c,
+            deep_temperature_c=self.deep_temperature_c,
+            deep_water_depth_m=self.deep_water_depth_m,
+        )
+
+
+@dataclass(frozen=True)
+class OtecSuitabilityReport:
+    """The ultimate analytical artifact summarizing physics, spatial, and financial triage."""
+
+    site_id: int
+    site_name: str
+    worst_month_delta_t_c: float
+    max_carnot_efficiency_pct: float
+    estimated_net_efficiency_pct: float
+    distance_to_1000m_isobath_m: float
+    seafloor_accessibility_score: float
+    seasonal_stability_factor: float
+    overall_investment_index: float
+    final_investment_grade: ScoreGrade
+
+
+@dataclass(frozen=True)
+class AiDatacenterProfile:
+    """Requirements and constraints for co-locating an AI Compute Cluster with OTEC."""
+
+    target_compute_power_mw: float # Planned data center capacity (e.g. 50 MW)
+    distance_to_backbone_pop_km: (
+        float  # Distance to the nearest backbone network (affects latency)
+    )
+    required_pue_limit: (
+        float  # Maximum allowable PUE according to investor specifications (e.g., 1.2)
+    )
+
+
+@dataclass(frozen=True)
+class AiDatacenterAssessment:
+    """Computed thermodynamic and network metrics for the AI host component."""
+
+    achievable_pue: float  # Calculated PUE taking into account OTEC ice water
+    cooling_energy_savings_pct: float  # Calculated energy savings on cooling in %
+    network_latency_penalty: float  # Penalty for distance from the network node (0.0 - 1.0)
