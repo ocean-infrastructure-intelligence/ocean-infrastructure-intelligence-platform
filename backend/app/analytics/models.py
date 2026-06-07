@@ -108,7 +108,7 @@ class HydroclimatologyProfile:
     ]  # Historical profile for 12 months
 
     def get_worst_month_profile(self) -> TemperatureProfile:
-        """Extracts the profile with the minimum surface temperature 
+        """Extracts the profile with the minimum surface temperature
         (worst-case design scenario)."""
         if not self.monthly_observations:
             raise ValueError(
@@ -123,3 +123,19 @@ class HydroclimatologyProfile:
             deep_temperature_c=self.deep_temperature_c,
             deep_water_depth_m=self.deep_water_depth_m,
         )
+
+
+@dataclass(frozen=True)
+class OtecSuitabilityReport:
+    """The ultimate analytical artifact summarizing physics, spatial, and financial triage."""
+
+    site_id: int
+    site_name: str
+    worst_month_delta_t_c: float
+    max_carnot_efficiency_pct: float
+    estimated_net_efficiency_pct: float
+    distance_to_1000m_isobath_m: float
+    seafloor_accessibility_score: float
+    seasonal_stability_factor: float
+    overall_investment_index: float
+    final_investment_grade: ScoreGrade

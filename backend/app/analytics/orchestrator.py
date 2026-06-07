@@ -9,6 +9,7 @@ from backend.app.analytics.models import (
 from backend.app.analytics.otec import OtecAnalysisService
 from backend.app.analytics.site_scoring import SiteScoringService
 from backend.app.analytics.bathymetry import BathymetryAnalysisService
+from backend.app.analytics.models import OtecSuitabilityReport
 
 
 class SiteIntelligenceOrchestrator:
@@ -71,4 +72,42 @@ class SiteIntelligenceOrchestrator:
             physics_assessment=physics,
             bathymetry_profile=bathymetry_profile,
             investment_score=investment_score,
+        )
+
+    @classmethod
+    def compile_suitability_report(
+        cls,
+        site_id: int,
+        site_name: str,
+        hydro_profile: HydroclimatologyProfile,
+        bathymetry_profile: BathymetryProfile,
+        base_cable_score: float,
+        base_risk_score: float,
+    ) -> OtecSuitabilityReport:
+        """Execute all engines and build the final investor-ready suitability report."""
+        # Прогоняем через наш существующий климатический оркестратор
+        assessment = cls.evaluate_site_climatology(
+            site_id=site_id,
+            site_name=site_name,
+            hydro_profile=hydro_profile,
+            bathymetry_profile=bathymetry_profile,
+            base_cable_score=base_cable_score,
+            base_risk_score=base_risk_score,
+        )
+
+        inv_score = assessment.investment_score
+        stability = OtecAnalysisService.evaluate_climatology_stability(hydro_profile)
+
+        return OtecSuitabilityReport(
+            site_id=site_id,
+            site_name=site_name,
+            worst_month_delta_t_c=assessment.physics_assessment.delta_t_c,
+            max_carnot_efficiency_pct=assessment.physics_assessment.carnot_efficiency_pct,
+            estimated_net_efficiency_pct=assessment.physics_assessment.net_efficiency_estimate_pct,
+            distance_to_1000m_isobath_m=bathymetry_profile.distance_to_1000m_m,
+            seafloor_accessibility_score=inv_score.get_component_score("logistics")
+            or 0.0,
+            seasonal_stability_factor=stability,
+            overall_investment_index=inv_score.overall_score,
+            final_investment_grade=inv_score.grade,
         )
