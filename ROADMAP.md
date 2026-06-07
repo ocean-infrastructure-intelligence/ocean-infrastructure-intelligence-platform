@@ -396,6 +396,213 @@ DONE
 - Country code validation
 - Server-side timestamps
 - Geometry helper properties (latitude/longitude)
+
+## Epic 2 — Ocean Data Intelligence Layer
+
+### Goal
+
+Transform OIIP from a synthetic analytical prototype into a real-world ocean intelligence platform powered by scientific datasets.
+
+The objective of this epic is to automatically derive OTEC suitability assessments directly from oceanographic and bathymetric observations instead of manually constructed analytical profiles.
+
+---
+
+### Strategic Outcome
+
+Current workflow:
+
+Site → Manual Temperature Profile → OTEC Analysis
+
+Target workflow:
+
+Coordinates → Ocean Data Retrieval → OTEC Analysis → Suitability Report
+
+After completing this epic, OIIP will be able to evaluate any ocean location automatically using real scientific datasets.
+
+---
+
+### Milestone 2.1 — Ocean Observation Domain Model
+
+Introduce a unified scientific observation model.
+
+Deliverables:
+
+* OceanObservation entity
+* Temperature observations
+* Depth observations
+* Bathymetry observations
+* Observation timestamps
+* Spatial coordinates support
+
+Example:
+
+```python
+@dataclass(frozen=True)
+class OceanObservation:
+    longitude: float
+    latitude: float
+    timestamp: datetime
+
+    surface_temperature_c: float
+
+    depth_100m_temperature_c: float
+    depth_500m_temperature_c: float
+    depth_1000m_temperature_c: float
+
+    seafloor_depth_m: float
+```
+
+Success Criteria:
+
+* Single scientific data model established
+* Independent from data providers
+* Reusable across all analytics modules
+
+---
+
+### Milestone 2.2 — GEBCO Bathymetry Integration
+
+Integrate global bathymetric datasets.
+
+Data Source:
+
+* GEBCO Global Bathymetry
+
+Capabilities:
+
+* Retrieve seafloor depth
+* Calculate distance to critical isobaths
+* Generate BathymetryProfile automatically
+
+Outputs:
+
+* BathymetryProfile
+* Distance to 500m contour
+* Distance to 1000m contour
+* Distance to 1500m contour
+
+Success Criteria:
+
+* Automatic bathymetric assessment from coordinates
+
+---
+
+### Milestone 2.3 — Ocean Temperature Data Adapters
+
+Integrate oceanographic temperature datasets.
+
+Primary Sources:
+
+* Copernicus Marine
+* NOAA World Ocean Atlas
+* Argo Profiles
+
+Capabilities:
+
+* Surface temperature retrieval
+* Deep-water temperature retrieval
+* Seasonal climatology generation
+* Monthly thermal observations
+
+Outputs:
+
+* TemperatureProfile
+* HydroclimatologyProfile
+
+Success Criteria:
+
+* Generate thermal profiles without manual inputs
+
+---
+
+### Milestone 2.4 — Site Assessment Engine
+
+Create a high-level analytical service.
+
+Interface:
+
+```python
+report = site_assessment_service.evaluate(
+    longitude=98.45,
+    latitude=8.12,
+)
+```
+
+Processing Pipeline:
+
+1. Retrieve ocean observations
+2. Build bathymetry profile
+3. Build climatology profile
+4. Run OTEC analysis
+5. Run MCDA scoring
+6. Generate suitability report
+
+Output:
+
+```python
+OtecSuitabilityReport
+```
+
+Success Criteria:
+
+* Fully automated site evaluation
+
+---
+
+### Milestone 2.5 — Thailand Ocean Coverage MVP
+
+Generate the first national-scale suitability map.
+
+Regions:
+
+* Gulf of Thailand
+* Andaman Sea
+
+Capabilities:
+
+* Grid-based analysis
+* Automatic ranking
+* Tier classification
+
+Outputs:
+
+* Tier 1 locations
+* Tier 2 locations
+* Tier 3 locations
+* Rejected locations
+
+Success Criteria:
+
+* Complete Thailand OTEC suitability dataset
+
+---
+
+### Deliverables
+
+* OceanObservation model
+* GEBCO adapter
+* Copernicus adapter
+* NOAA adapter
+* Automated profile generation
+* Site Assessment Engine
+* Thailand coverage dataset
+
+---
+
+### Definition of Done
+
+The following workflow must work without manual analytical inputs:
+
+```python
+report = site_assessment_service.evaluate(
+    longitude=98.45,
+    latitude=8.12,
+)
+```
+
+The system automatically retrieves scientific data, evaluates OTEC viability, applies bathymetric and climatological constraints, and produces a complete investment-grade OtecSuitabilityReport.
+
+
 ---
 
 # Future Research Areas
