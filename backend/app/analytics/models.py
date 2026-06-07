@@ -4,6 +4,7 @@ Domain structures for multi-criteria site suitability intelligence."""
 from dataclasses import dataclass
 from enum import Enum
 from typing import List
+from datetime import datetime
 
 
 class ScoreGrade(str, Enum):
@@ -145,7 +146,7 @@ class OtecSuitabilityReport:
 class AiDatacenterProfile:
     """Requirements and constraints for co-locating an AI Compute Cluster with OTEC."""
 
-    target_compute_power_mw: float # Planned data center capacity (e.g. 50 MW)
+    target_compute_power_mw: float  # Planned data center capacity (e.g. 50 MW)
     distance_to_backbone_pop_km: (
         float  # Distance to the nearest backbone network (affects latency)
     )
@@ -160,4 +161,42 @@ class AiDatacenterAssessment:
 
     achievable_pue: float  # Calculated PUE taking into account OTEC ice water
     cooling_energy_savings_pct: float  # Calculated energy savings on cooling in %
-    network_latency_penalty: float  # Penalty for distance from the network node (0.0 - 1.0)
+    network_latency_penalty: (
+        float  # Penalty for distance from the network node (0.0 - 1.0)
+    )
+
+
+@dataclass(frozen=True)
+class OceanObservation:
+    """A real-world oceanographic data point combining physics and bathymetry."""
+
+    longitude: float
+    latitude: float
+    timestamp: datetime
+
+    # Thermal surface profile (SST)
+    surface_temperature_c: float
+
+    # Dynamic temperature profile at key depths
+    # Key — depth in meters (e.g., 100, 500, 1000), value — temperature
+    temperature_at_depths_c: dict[int, float]
+
+    # Data from GEBCO / NOAA Bathymetry
+    seafloor_depth_m: float
+
+    # Data lineage tracking (e.g., "copernicus", "gebco", "mock-thailand")
+    source: str
+
+    # Additional scientific metrics for future sprints (Copernicus)
+    salinity_psu: float | None = None
+    surface_current_velocity_ms: float | None = None
+
+    @property
+    def worst_case_delta_t(self) -> float:
+        """Quick diagnostic check for thermal gradient viability."""
+        if not self.temperature_at_depths_c:
+            return 0.0
+        # Looking for the maximum available depth for OTEC (usually 1000 m)
+        max_depth = max(self.temperature_at_depths_c.keys())
+        deep_temp = self.temperature_at_depths_c[max_depth]
+        return round(self.surface_temperature_c - deep_temp, 2)
