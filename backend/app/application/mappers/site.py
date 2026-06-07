@@ -1,12 +1,12 @@
 """Data mappers translating Web Pydantic schemas into Application DTOs."""
 
-from backend.app.application.dtos.site import CoordinatesDTO, SiteCreateDTO, SiteUpdateDTO
+from backend.app.application.dtos.site import (
+    CoordinatesDTO,
+    SiteCreateDTO,
+    SiteUpdateDTO,
+)
 from backend.app.domain.exceptions import SpatialValidationError
-# from backend.app.application.dtos.site import SiteCreateDTO, SiteUpdateDTO, CoordinatesDTO
-from backend.app.schemas.site import (
-    SiteCreate,
-    SiteUpdate,
-)  # Ваши Pydantic-схемы веб-слоя
+from backend.app.schemas.site import SiteCreate, SiteUpdate
 
 
 class SiteMapper:
@@ -27,24 +27,20 @@ class SiteMapper:
     def to_update_dto(payload: SiteUpdate) -> SiteUpdateDTO:
         """Map incoming API payload into strict update DTO, enforcing spatial invariants."""
         fields_set = payload.model_fields_set
-        lat_sent = "latitude" in fields_set
-        lon_sent = "longitude" in fields_set
 
-        # Единое место для XOR-проверки. Защищает все входящие транспортные потоки.
-        if lat_sent != lon_sent:
+        # Определяем, были ли координаты отправлены и не являются ли они пустыми
+        lon_val = payload.longitude if "longitude" in fields_set else None
+        lat_val = payload.latitude if "latitude" in fields_set else None
+
+        # Жесткая XOR-защита: если заполнено только одно из полей
+        if (lon_val is not None) != (lat_val is not None):
             raise SpatialValidationError(
                 "Both longitude and latitude must be provided together for a spatial update."
             )
 
         coordinates = None
-        if lat_sent and lon_sent:
-            if payload.longitude is None or payload.latitude is None:
-                raise SpatialValidationError(
-                    "Geographic coordinates cannot be null values."
-                )
-            coordinates = CoordinatesDTO(
-                longitude=payload.longitude, latitude=payload.latitude
-            )
+        if lon_val is not None and lat_val is not None:
+            coordinates = CoordinatesDTO(longitude=lon_val, latitude=lat_val)
 
         return SiteUpdateDTO(
             name=payload.name if "name" in fields_set else None,
