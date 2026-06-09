@@ -1,399 +1,436 @@
 # System Overview
 
-## Purpose
+## Ocean Infrastructure Intelligence Platform (OIIP)
 
-The Ocean Infrastructure Intelligence Platform (OIIP) is an open-source geospatial intelligence system for evaluating ocean-based energy, infrastructure, and AI datacenter opportunities.
-
-The platform integrates oceanographic, infrastructure, environmental, risk, and economic datasets into a unified spatial analytics environment.
-
-Its primary objective is to identify and evaluate candidate locations for:
-
-* Ocean Thermal Energy Conversion (OTEC)
-* Offshore Renewable Energy
-* AI Datacenters
-* Marine Infrastructure Projects
-* Climate Technology Initiatives
+**AI-powered Ocean Infrastructure Project Intelligence Platform**
 
 ---
 
-# Project Scope
+# Executive Summary
 
-OIIP is not a single-purpose OTEC calculator.
+Ocean Infrastructure Intelligence Platform (OIIP) is an open-source decision intelligence system designed to transform ocean data into bankable infrastructure opportunities.
 
-Instead, it serves as a spatial intelligence platform capable of supporting multiple ocean infrastructure use cases.
+The platform combines oceanographic, infrastructure, climate, economic, and policy intelligence to support the development of:
 
-Current focus areas include:
+* Ocean Thermal Energy Conversion (OTEC)
+* Seawater Air Conditioning (SWAC)
+* Desalination Systems
+* Deep Ocean Water Applications
+* Offshore Renewable Energy
+* AI Datacenter Infrastructure
+* Blue Economy Projects
 
-* Oceanography
-* OTEC
-* Marine Infrastructure
-* Submarine Cables
-* Power Infrastructure
-* Maritime Logistics
-* Environmental Risk Assessment
-* AI Datacenter Site Selection
+OIIP helps governments, developers, investors, utilities, and development banks evaluate whether a project should move from concept to feasibility study.
+
+---
+
+# Why OIIP Exists
+
+Many ocean infrastructure projects fail long before construction begins.
+
+The reasons are rarely technological.
+
+Most projects fail because of:
+
+* fragmented datasets;
+* lengthy pre-feasibility studies;
+* uncertain economics;
+* climate risks;
+* regulatory uncertainty;
+* lack of investor confidence.
+
+Today, evaluating a potential OTEC or ocean infrastructure project often requires months of manual analysis across multiple disciplines.
+
+OIIP aims to reduce this process from months to minutes.
+
+---
+
+# Core Mission
+
+Transform coordinates into project intelligence.
+
+Input:
+
+```text
+Latitude
+Longitude
+```
+
+Output:
+
+```text
+Ocean Infrastructure Project Intelligence Report
+```
+
+The report provides a structured assessment of:
+
+* Resource Potential
+* Infrastructure Readiness
+* Climate Risk
+* Economic Feasibility
+* PPP Readiness
+* Bankability
+* Blue Economy Opportunities
 
 ---
 
 # Core Concept
 
-The platform combines multiple independent data layers.
+Traditional GIS platforms answer:
+
+> What exists here?
+
+OIIP answers:
+
+> What should be built here?
+
+The platform integrates multiple intelligence domains into a unified project evaluation framework.
 
 ```text
-Oceanography
-+
-Infrastructure
-+
-Energy
-+
-Risk
-+
-Economics
-+
-AI Infrastructure
-=
 Ocean Intelligence
+        +
+Infrastructure Intelligence
+        +
+Climate Intelligence
+        +
+Economic Intelligence
+        +
+Policy Intelligence
+        +
+Nexus Intelligence
+        =
+Project Intelligence
 ```
-
-Each layer contributes information used to evaluate candidate locations.
 
 ---
 
-# High-Level System Architecture
+# Primary Users
+
+## Governments
+
+Need:
+
+* Energy security
+* Reduced fuel imports
+* Climate resilience
+* Economic development
+
+OIIP provides:
+
+* Strategic planning tools
+* National project screening
+* PPP readiness assessments
+
+---
+
+## Developers
+
+Need:
+
+* Project pipeline
+* Faster site selection
+* Reduced development risk
+
+OIIP provides:
+
+* Automated site screening
+* Feasibility support
+* Project intelligence reports
+
+---
+
+## Investors
+
+Need:
+
+* Bankable opportunities
+* Transparent risk assessment
+* Financial visibility
+
+OIIP provides:
+
+* Investment intelligence
+* Economic modeling
+* Bankability scoring
+
+---
+
+## Utilities
+
+Need:
+
+* Reliable baseload power
+* Grid planning support
+
+OIIP provides:
+
+* Resource analysis
+* Infrastructure integration assessments
+
+---
+
+## Development Banks
+
+Need:
+
+* Climate impact
+* Sustainable development outcomes
+* Finance-ready projects
+
+OIIP provides:
+
+* Impact metrics
+* Climate reporting support
+* Investment readiness assessments
+
+---
+
+# Platform Capabilities
+
+## Ocean Resource Intelligence
+
+Evaluates:
+
+* Thermal gradients
+* Deep ocean cooling potential
+* Bathymetry
+* Oceanographic conditions
+
+Outputs:
+
+* OTEC Suitability Score
+* Cooling Potential Score
+* Resource Assessment
+
+---
+
+## Infrastructure Intelligence
+
+Evaluates:
+
+* Ports
+* Shipyards
+* Submarine cables
+* Grid infrastructure
+* Logistics assets
+
+Outputs:
+
+* Infrastructure Readiness Score
+* Connectivity Assessment
+* Logistics Analysis
+
+---
+
+## Climate Resilience Intelligence
+
+Evaluates:
+
+* Tropical cyclones
+* Extreme waves
+* Seismic activity
+* Tsunami exposure
+
+Outputs:
+
+* Climate Risk Score
+* Resilience Score
+* Survivability Assessment
+
+---
+
+## Economic Intelligence
+
+Evaluates:
+
+* CAPEX
+* OPEX
+* LCOE
+* NPV
+* IRR
+* Payback period
+
+Outputs:
+
+* Economic Feasibility Assessment
+* Financial Indicators
+* Investment Scenarios
+
+---
+
+## PPP & Policy Intelligence
+
+Evaluates:
+
+* Regulatory readiness
+* Climate policies
+* Energy strategies
+* Institutional capacity
+
+Outputs:
+
+* PPP Readiness Score
+* Policy Gap Analysis
+* Regulatory Assessment
+
+---
+
+## Blue Economy Nexus Intelligence
+
+Evaluates opportunities beyond energy generation.
+
+Applications:
+
+* Desalination
+* Aquaculture
+* Industrial Cooling
+* Hydrogen Production
+* Deep Ocean Water Industries
+* AI Datacenter Cooling
+
+Outputs:
+
+* Nexus Opportunity Assessment
+* Co-product Revenue Analysis
+* Regional Economic Impact
+
+---
+
+# Core Product Engines
+
+## Site Screening Engine
+
+Answers:
+
+> Is this location suitable?
+
+Outputs:
+
+* Site Score
+* Resource Score
+* Infrastructure Score
+
+---
+
+## Climate Resilience Engine
+
+Answers:
+
+> Can infrastructure survive here?
+
+Outputs:
+
+* Climate Risk Score
+* Resilience Assessment
+
+---
+
+## Project Intelligence Engine
+
+Answers:
+
+> Should the project move forward?
+
+Outputs:
+
+* Project Intelligence Score
+* Opportunity Ranking
+* Development Recommendation
+
+---
+
+## PPP Readiness Engine
+
+Answers:
+
+> Is the ecosystem ready?
+
+Outputs:
+
+* PPP Readiness Score
+* Institutional Assessment
+
+---
+
+## Bankability Engine
+
+Answers:
+
+> Can the project attract financing?
+
+Outputs:
+
+* Bankability Score
+* Finance Readiness Assessment
+
+---
+
+## AI Datacenter Suitability Engine
+
+Answers:
+
+> Can this location support future AI infrastructure?
+
+Outputs:
+
+* AI Datacenter Suitability Index (ADCSI)
+* Cooling Assessment
+* Connectivity Assessment
+* Energy Security Score
+
+---
+
+# System Architecture Overview
 
 ```text
 External Data Sources
         │
         ▼
- Data Providers
+Data Acquisition Layer
         │
         ▼
- Processing Pipelines
+Ocean Intelligence Layer
         │
         ▼
-   Spatial Database
-     (PostGIS)
+Infrastructure Intelligence Layer
         │
-        ├── Analytics
-        ├── Scoring
-        ├── Economics
-        ├── GIS Services
-        └── AI Agents
-                │
-                ▼
-            API Layer
-                │
-                ▼
-          Web Dashboard
+        ▼
+Climate Resilience Layer
+        │
+        ▼
+Economic Intelligence Layer
+        │
+        ▼
+Policy & PPP Layer
+        │
+        ▼
+Project Intelligence Engine
+        │
+        ▼
+Decision Support Layer
+        │
+        ▼
+API & Applications
 ```
 
 ---
 
-# Major Subsystems
+# Geographic Strategy
 
-## Data Providers
-
-Responsible for retrieving information from external systems.
-
-Examples:
-
-* Copernicus Marine Service
-* NOAA
-* GEBCO
-* OpenStreetMap
-* AIS Providers
-* IBTrACS
-* National Infrastructure Datasets
-
-Responsibilities:
-
-* Authentication
-* Data Retrieval
-* Metadata Collection
-* Source Normalization
-
----
-
-## Processing Pipelines
-
-Transform raw datasets into platform-ready formats.
-
-Responsibilities:
-
-* Validation
-* Cleaning
-* Transformation
-* Enrichment
-* Aggregation
-
-Outputs:
-
-* PostGIS records
-* Parquet datasets
-* Derived analytical layers
-
----
-
-## Spatial Data Platform
-
-PostgreSQL + PostGIS is the central system of record.
-
-Responsibilities:
-
-* Spatial storage
-* Spatial indexing
-* Distance calculations
-* Geospatial joins
-* Candidate site storage
-
-All major analytics depend on PostGIS.
-
----
-
-## Analytics Engine
-
-Performs scientific and engineering calculations.
-
-Responsibilities:
-
-* Thermal gradient analysis
-* OTEC modeling
-* Infrastructure analysis
-* Risk calculations
-* Site evaluation
-
-Outputs:
-
-* Metrics
-* Scores
-* Rankings
-
----
-
-## Economic Engine
-
-Evaluates project feasibility.
-
-Responsibilities:
-
-* CAPEX estimation
-* OPEX estimation
-* NPV calculations
-* IRR calculations
-* LCOE calculations
-* Scenario analysis
-
-Outputs:
-
-* Economic indicators
-* Investment attractiveness metrics
-
----
-
-## Scoring Engine
-
-Combines analytical results into decision-support metrics.
-
-Examples:
-
-* OTEC Score
-* Infrastructure Score
-* Risk Score
-* Economic Score
-* AI Datacenter Suitability Index (ADCSI)
-
-Outputs:
-
-* Site rankings
-* Opportunity maps
-* Comparative reports
-
----
-
-## API Layer
-
-Provides access to platform data and analytics.
-
-Typical consumers:
-
-* Web dashboard
-* Research notebooks
-* External applications
-* AI agents
-
-Example endpoints:
-
-```text
-/api/sites
-/api/search
-/api/maps
-/api/analytics
-/api/reports
-```
-
----
-
-## Web Dashboard
-
-Provides interactive access to platform functionality.
-
-Capabilities:
-
-* Interactive maps
-* Layer management
-* Site search
-* Site comparison
-* Report generation
-
-Planned technology stack:
-
-* Qwik
-* TypeScript
-* Leaflet
-* MapLibre
-
----
-
-# Core Domains
-
-The platform is organized around several domains.
-
-## Oceanography
-
-Responsible for:
-
-* Temperature Profiles
-* Sea Surface Temperature
-* Deep Water Temperature
-* Salinity
-* Currents
-* Waves
-* Bathymetry
-
----
-
-## Infrastructure
-
-Responsible for:
-
-* Submarine Cables
-* Landing Stations
-* Ports
-* Logistics Assets
-* Power Grid Infrastructure
-
----
-
-## Energy
-
-Responsible for:
-
-* OTEC
-* Offshore Wind
-* Wave Energy
-* Hybrid Energy Systems
-
----
-
-## Risk
-
-Responsible for:
-
-* Cyclones
-* Tsunamis
-* Seismic Activity
-* Shipping Density
-
----
-
-## Economics
-
-Responsible for:
-
-* Financial Modeling
-* Cost Estimation
-* Feasibility Analysis
-
----
-
-## AI Infrastructure
-
-Responsible for:
-
-* Datacenter Site Selection
-* Cooling Potential
-* Connectivity Analysis
-* Infrastructure Readiness
-
----
-
-# Candidate Site Model
-
-A candidate site is the primary analytical object in the platform.
-
-A site represents a potential location for future ocean infrastructure development.
-
-Each site contains:
-
-* Geographic Information
-* Oceanographic Metrics
-* Infrastructure Metrics
-* Risk Indicators
-* Economic Metrics
-* Suitability Scores
-
-All major analytics operate on candidate sites.
-
----
-
-# Data Flow
-
-The platform follows a reproducible data processing workflow.
-
-```text
-Acquire
-    │
-    ▼
-Validate
-    │
-    ▼
-Normalize
-    │
-    ▼
-Store
-    │
-    ▼
-Analyze
-    │
-    ▼
-Score
-    │
-    ▼
-Visualize
-```
-
-Each stage should be independently testable and reproducible.
-
----
-
-# Geographic Focus
-
-## Phase 1
+## Stage 1
 
 Thailand
 
-Focus areas:
+Focus Areas:
 
 * Gulf of Thailand
 * Andaman Sea
 
 ---
 
-## Phase 2
+## Stage 2
 
 Southeast Asia
-
-Target regions:
 
 * Indonesia
 * Philippines
@@ -402,88 +439,51 @@ Target regions:
 
 ---
 
-## Phase 3
+## Stage 3
 
-Global Tropical Ocean Belt
+Small Island Developing States (SIDS)
 
-Coverage:
-
-* Pacific Ocean
+* Caribbean
+* Pacific Islands
 * Indian Ocean
-* Atlantic Ocean
-* Caribbean Region
 
 ---
 
-# AI Datacenter Suitability Index (ADCSI)
+## Stage 4
 
-ADCSI is a composite indicator designed to evaluate locations for future AI infrastructure.
-
-Evaluation criteria include:
-
-* Cooling Potential
-* Energy Availability
-* Cable Connectivity
-* Infrastructure Readiness
-* Environmental Risk
-* Logistics Accessibility
-
-The objective is to identify locations where ocean resources can support large-scale computing infrastructure.
+Global Tropical Oceans
 
 ---
 
-# Non-Goals
+# Long-Term Vision
 
-OIIP is not intended to:
+OIIP aims to become the global open-source standard for ocean infrastructure project intelligence.
 
-* Replace official oceanographic services
-* Replace engineering feasibility studies
-* Provide investment advice
-* Act as a real-time operational control system
+The platform's long-term objective is to help governments, developers, investors, and international institutions accelerate deployment of resilient ocean infrastructure by reducing uncertainty, improving decision-making, and increasing access to investment-ready opportunities.
 
-The platform is intended to support research, planning, and decision-making.
-
----
-
-# Future Evolution
-
-Planned future capabilities include:
-
-* AI Research Agents
-* Autonomous Site Discovery
-* Digital Ocean Twins
-* Real-Time AIS Processing
-* Global Infrastructure Mapping
-* Climate Impact Modeling
-* Floating Datacenter Analysis
+Success is achieved when ocean infrastructure pre-feasibility analysis can be completed in minutes rather than months.
 
 ---
 
 # Related Documents
 
-For detailed architecture information see:
+Architecture Details:
 
 ```text
+docs/architecture/architecture.md
 docs/architecture/erd.md
 docs/architecture/api.md
-docs/architecture/event-model.md
 docs/architecture/deployment.md
 ```
 
-For contribution guidelines see:
-
-```text
-CONTRIBUTING.md
-```
-
-For project governance see:
-
-```text
-GOVERNANCE.md
-```
-
-For development plans see:
+Project Planning:
 
 ```text
 ROADMAP.md
+```
+
+Project Vision:
+
+```text
+README.md
 ```

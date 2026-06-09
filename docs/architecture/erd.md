@@ -1,578 +1,580 @@
 # Entity Relationship Diagram (ERD)
 
-## Purpose
-
-This document defines the logical data model for the Ocean Infrastructure Intelligence Platform (OIIP).
-
-The model is designed to support:
-
-* Oceanographic data storage
-* OTEC analysis
-* Infrastructure intelligence
-* Environmental risk assessment
-* Economic modeling
-* AI Datacenter Suitability Index (ADCSI)
-* Geospatial analytics
-
-The platform uses PostgreSQL with PostGIS as the primary operational database.
+## Ocean Infrastructure Intelligence Platform (OIIP)
 
 ---
 
-# Design Principles
+# Purpose
 
-The data model follows several principles:
+This document describes the logical data model of the Ocean Infrastructure Intelligence Platform (OIIP).
 
-* Spatial-first architecture
-* Domain separation
-* Time-series support
-* Extensibility
-* Reproducibility
-* Source traceability
+The platform integrates oceanographic, infrastructure, climate, economic, and policy datasets to support the evaluation and development of ocean infrastructure projects.
 
----
+The data model is designed around two fundamental concepts:
 
-# High-Level Entity Model
+1. Infrastructure Assets and Environmental Data
+2. Ocean Infrastructure Projects
 
-```text
-SITE
- │
- ├── OCEAN_PROFILE
- │
- ├── OCEAN_SURFACE
- │
- ├── OTEC_POTENTIAL
- │
- ├── SITE_INFRASTRUCTURE
- │
- ├── SITE_RISK
- │
- ├── SITE_ECONOMICS
- │
- ├── DATACENTER_SUITABILITY
- │
- └── SITE_SCORE
-```
-
-The Site entity is the central object of the platform.
+The Project is the primary business entity of the platform.
 
 ---
 
-# Core Entity: Site
-
-Represents a candidate location for ocean infrastructure development.
-
-## site
+# High-Level Domain Model
 
 ```text
-site
-├── id
-├── name
-├── latitude
-├── longitude
-├── geom
-├── country_code
-├── region
-├── created_at
-└── updated_at
-```
+OceanInfrastructureProject
+│
+├── Site
+├── ResourceAssessment
+├── InfrastructureAssessment
+├── ClimateAssessment
+├── EconomicAssessment
+├── PPPAssessment
+├── NexusAssessment
+├── BankabilityAssessment
+├── Stakeholder
+└── DevelopmentStage
 
-Primary Key:
-
-```text
-id
-```
-
-Geometry:
-
-```text
-POINT (EPSG:4326)
-```
-
-Relationships:
-
-```text
-site
- ├── 1:N ocean_profile
- ├── 1:N ocean_surface
- ├── 1:1 otec_potential
- ├── 1:1 site_infrastructure
- ├── 1:1 site_risk
- ├── 1:1 site_economics
- ├── 1:1 datacenter_suitability
- └── 1:1 site_score
+Site
+│
+├── OceanObservation
+├── BathymetryCell
+├── ClimateHazard
+├── Port
+├── Shipyard
+├── GridAsset
+└── CableLandingStation
 ```
 
 ---
 
-# Oceanography Domain
+# Core Project Domain
 
-## ocean_profile
+## OceanInfrastructureProject
 
-Stores vertical water column measurements.
+Represents a candidate, planned, active, or operational infrastructure project.
+
+Examples:
+
+* OTEC Plant
+* SWAC System
+* Desalination Facility
+* Deep Ocean Water Facility
+* Offshore AI Datacenter
+* Hybrid Blue Economy Project
+
+### Attributes
 
 ```text
-ocean_profile
-├── id
-├── site_id
-├── observation_time
-├── depth_m
-├── temperature_c
-├── salinity_psu
-├── density_kgm3
-└── source_id
+project_id (UUID)
+name
+project_type
+country_code
+region
+status
+description
+created_at
+updated_at
 ```
 
-Relationship:
+### Relationships
 
 ```text
-site 1:N ocean_profile
-```
-
-Example:
-
-```text
-Depth      Temperature
-0 m        29.4 °C
-100 m      24.6 °C
-500 m      11.3 °C
-1000 m      5.8 °C
-```
-
----
-
-## ocean_surface
-
-Stores surface conditions.
-
-```text
-ocean_surface
-├── id
-├── site_id
-├── observation_time
-├── sst_c
-├── wave_height_m
-├── current_speed_ms
-├── current_direction_deg
-└── source_id
-```
-
-Relationship:
-
-```text
-site 1:N ocean_surface
+Project 1 → 1 Site
+Project 1 → N Assessments
+Project N ↔ N Stakeholders
+Project 1 → 1 DevelopmentStage
 ```
 
 ---
 
-## bathymetry_point
+## Site
 
-Stores bathymetric observations.
+Represents a geographic location evaluated by OIIP.
+
+### Attributes
 
 ```text
-bathymetry_point
-├── id
-├── geom
-├── depth_m
-├── source_id
-└── observation_time
+site_id (UUID)
+latitude
+longitude
+distance_to_shore_km
+water_depth_m
+exclusive_economic_zone
+country_code
+geometry
 ```
 
-Geometry:
+### Relationships
 
 ```text
-POINT
-```
-
-Spatial Index:
-
-```text
-GIST
+Site 1 → N OceanObservation
+Site 1 → N ClimateHazard
+Site N ↔ N InfrastructureAsset
 ```
 
 ---
 
-# Energy Domain
+# Ocean Domain
 
-## otec_potential
+## OceanObservation
 
-Stores calculated OTEC metrics.
+Stores oceanographic measurements and derived values.
 
-```text
-otec_potential
-├── site_id
-├── surface_temp_c
-├── deep_temp_c
-├── delta_t
-├── theoretical_power_mw
-├── net_power_mw
-├── efficiency
-├── calculation_version
-└── calculated_at
-```
-
-Relationship:
+### Attributes
 
 ```text
-site 1:1 otec_potential
+observation_id
+site_id
+observation_date
+
+sea_surface_temperature
+temperature_200m
+temperature_500m
+temperature_1000m
+
+salinity
+current_velocity
+
+data_source
 ```
 
-Purpose:
+### Derived Metrics
 
-Evaluate thermal energy potential.
+```text
+thermal_gradient
+cooling_potential
+otec_resource_score
+```
+
+---
+
+## BathymetryCell
+
+Represents seabed characteristics.
+
+### Attributes
+
+```text
+cell_id
+geometry
+depth_m
+slope
+distance_to_1000m_depth
+source
+```
+
+### Purpose
+
+Supports:
+
+* OTEC
+* SWAC
+* Deep-water intake analysis
+* Pipeline routing
 
 ---
 
 # Infrastructure Domain
 
-## power_grid_asset
+## InfrastructureAsset
 
-Represents electrical infrastructure.
+Abstract parent entity.
 
-```text
-power_grid_asset
-├── id
-├── name
-├── asset_type
-├── voltage_kv
-├── geom
-└── source_id
-```
-
-Geometry:
+### Types
 
 ```text
-POINT
+PORT
+SHIPYARD
+GRID_ASSET
+SUBSTATION
+POWER_PLANT
+CABLE_LANDING_STATION
+LOGISTICS_HUB
 ```
 
 ---
 
-## submarine_cable
+## Port
 
-Represents submarine communication cables.
-
-```text
-submarine_cable
-├── id
-├── name
-├── owner
-├── capacity_tbps
-├── geom
-└── source_id
-```
-
-Geometry:
+### Attributes
 
 ```text
-LINESTRING
+port_id
+name
+country
+capacity
+draft_depth
+coordinates
 ```
 
 ---
 
-## cable_landing_station
+## Shipyard
 
-Represents cable landing stations.
-
-```text
-cable_landing_station
-├── id
-├── name
-├── country
-├── geom
-└── source_id
-```
-
-Geometry:
+### Attributes
 
 ```text
-POINT
+shipyard_id
+name
+country
+fabrication_capabilities
+heavy_lift_capacity
+coordinates
 ```
 
 ---
 
-## port
+## GridAsset
 
-Represents maritime ports.
-
-```text
-port
-├── id
-├── name
-├── port_type
-├── geom
-└── source_id
-```
-
-Geometry:
+### Attributes
 
 ```text
-POINT
+grid_asset_id
+asset_type
+capacity_mw
+operator
+coordinates
 ```
 
 ---
 
-## site_infrastructure
+## CableLandingStation
 
-Aggregated infrastructure metrics.
+### Attributes
 
 ```text
-site_infrastructure
-├── site_id
-├── nearest_port_km
-├── nearest_grid_km
-├── nearest_cable_km
-├── nearest_landing_station_km
-├── logistics_score
-└── infrastructure_score
+landing_station_id
+name
+operator
+connected_cables
+coordinates
 ```
 
-Relationship:
+### Purpose
+
+Critical for:
+
+* AI Datacenter projects
+* Offshore digital infrastructure
+
+---
+
+# Climate & Risk Domain
+
+## ClimateHazard
+
+Stores natural hazard data.
+
+### Types
 
 ```text
-site 1:1 site_infrastructure
+CYCLONE
+TSUNAMI
+SEISMIC
+EXTREME_WAVE
+FLOODING
+```
+
+### Attributes
+
+```text
+hazard_id
+hazard_type
+severity
+frequency
+return_period
+geometry
 ```
 
 ---
 
-# Risk Domain
+## ClimateAssessment
 
-## cyclone_event
+Evaluates survivability of infrastructure.
 
-Historical cyclone tracks.
-
-```text
-cyclone_event
-├── id
-├── event_name
-├── category
-├── event_time
-├── geom
-└── source_id
-```
-
-Geometry:
+### Attributes
 
 ```text
-LINESTRING
+assessment_id
+project_id
+
+cyclone_risk_score
+wave_risk_score
+tsunami_risk_score
+seismic_risk_score
+
+resilience_score
+assessment_date
 ```
 
 ---
 
-## site_risk
+# Economic Domain
 
-Aggregated site risks.
+## EconomicAssessment
 
-```text
-site_risk
-├── site_id
-├── cyclone_score
-├── tsunami_score
-├── seismic_score
-├── wave_score
-└── overall_risk_score
-```
+Evaluates project economics.
 
-Relationship:
+### Attributes
 
 ```text
-site 1:1 site_risk
-```
+assessment_id
+project_id
 
----
+capex_usd
+opex_usd_year
 
-# Economics Domain
+lcoe
+npv
+irr
+payback_period_years
 
-## site_economics
-
-Stores economic indicators.
-
-```text
-site_economics
-├── site_id
-├── capex_usd
-├── opex_usd
-├── npv_usd
-├── irr
-├── lcoe
-├── scenario_name
-└── calculated_at
-```
-
-Relationship:
-
-```text
-site 1:1 site_economics
+economic_score
+assessment_date
 ```
 
 ---
 
-# AI Infrastructure Domain
+## BankabilityAssessment
 
-## datacenter_suitability
+Evaluates financing readiness.
 
-Stores AI datacenter metrics.
+### Attributes
 
 ```text
-datacenter_suitability
-├── site_id
-├── cooling_score
-├── cable_score
-├── grid_score
-├── logistics_score
-├── security_score
-├── sustainability_score
-└── adcsi
+assessment_id
+project_id
+
+investment_score
+funding_readiness_score
+climate_impact_score
+
+bankability_score
+
+assessment_date
 ```
 
-Relationship:
+### Purpose
+
+Primary output for:
+
+* Investors
+* Infrastructure Funds
+* Development Banks
+
+---
+
+# Policy & PPP Domain
+
+## PPPAssessment
+
+Evaluates institutional readiness.
+
+### Attributes
 
 ```text
-site 1:1 datacenter_suitability
+assessment_id
+project_id
+
+regulatory_score
+policy_alignment_score
+utility_readiness_score
+financing_availability_score
+
+ppp_score
+assessment_date
 ```
 
 ---
 
-# Ranking Domain
+# Blue Economy Domain
 
-## site_score
+## NexusAssessment
 
-Final ranking table.
+Evaluates secondary value opportunities.
+
+### Attributes
 
 ```text
-site_score
-├── site_id
-├── otec_score
-├── infrastructure_score
-├── risk_score
-├── economic_score
-├── adcsi_score
-├── total_score
-├── ranking
-└── calculated_at
+assessment_id
+project_id
+
+desalination_score
+aquaculture_score
+cooling_score
+hydrogen_score
+
+nexus_score
+assessment_date
 ```
 
-Relationship:
+### Purpose
+
+Identifies additional revenue streams and economic benefits.
+
+---
+
+# Stakeholder Domain
+
+## Stakeholder
+
+Represents organizations involved in a project.
+
+### Types
 
 ```text
-site 1:1 site_score
+GOVERNMENT
+DEVELOPER
+INVESTOR
+UTILITY
+DEVELOPMENT_BANK
+RESEARCH_INSTITUTION
+TECHNOLOGY_PROVIDER
+NGO
+```
+
+### Attributes
+
+```text
+stakeholder_id
+name
+stakeholder_type
+country
+website
 ```
 
 ---
 
-# Data Lineage
+## ProjectStakeholder
 
-Every dataset should be traceable to its source.
+Many-to-many relationship.
 
-## data_source
+### Attributes
 
 ```text
-data_source
-├── id
-├── provider_name
-├── dataset_name
-├── version
-├── source_url
-├── license
-├── acquired_at
-└── metadata
+project_id
+stakeholder_id
+role
 ```
 
-Examples:
+### Roles
 
-* Copernicus Marine
-* NOAA
-* GEBCO
-* OpenStreetMap
-* IBTrACS
-
-All analytical entities should reference a source whenever practical.
+```text
+PROJECT_OWNER
+INVESTOR
+OFFTAKER
+REGULATOR
+TECHNICAL_PARTNER
+FINANCIAL_PARTNER
+```
 
 ---
 
-# Metadata and Auditing
+# Development Lifecycle Domain
 
-All major entities should support:
+## DevelopmentStage
+
+Tracks project maturity.
+
+### Stages
 
 ```text
-created_at
+IDEA
+PRE_SCREENING
+PRE_FEASIBILITY
+FEASIBILITY
+PPP_DEVELOPMENT
+FINANCING
+ENGINEERING
+CONSTRUCTION
+OPERATION
+DECOMMISSIONING
+```
+
+### Attributes
+
+```text
+project_id
+current_stage
+stage_started_at
 updated_at
-created_by
-updated_by
 ```
-
-This improves reproducibility and governance.
 
 ---
 
-# Spatial Indexing Strategy
+# Assessment Framework
 
-The following entities require GIST indexes:
+All project intelligence assessments follow a common structure.
+
+## Assessment Base Model
 
 ```text
-site
-bathymetry_point
-power_grid_asset
-submarine_cable
-cable_landing_station
-port
-cyclone_event
+assessment_id
+project_id
+assessment_date
+data_version
+methodology_version
+score
 ```
 
-Benefits:
+Specialized assessments inherit this structure:
 
-* Fast nearest-neighbor search
-* Distance calculations
-* Spatial joins
-* Overlay analysis
+* ResourceAssessment
+* InfrastructureAssessment
+* ClimateAssessment
+* EconomicAssessment
+* PPPAssessment
+* NexusAssessment
+* BankabilityAssessment
 
 ---
 
-# Future Extensions
+# Project Intelligence Score
 
-The data model is designed to support future domains.
-
-Potential additions:
+The primary analytical output of OIIP.
 
 ```text
-offshore_wind
-wave_energy
-hydrogen_production
-ocean_carbon_capture
-floating_datacenters
-marine_robotics
-digital_ocean_twin
+Project Intelligence Score =
+Resource Score
++ Infrastructure Score
++ Climate Resilience Score
++ Economic Score
++ PPP Score
++ Nexus Score
++ Bankability Score
 ```
 
-Future entities should follow the same principles:
+Produces:
 
-* Spatial-first
-* Source traceable
-* Reproducible
-* Extensible
+```text
+Ocean Infrastructure Project Intelligence Report
+```
 
 ---
 
-# Related Documents
+# Architectural Principle
 
-For system architecture:
+The platform is project-centric.
 
-```text
-docs/architecture/system-overview.md
-```
+A Site is a location.
 
-For API specifications:
+A Project is an investment opportunity.
 
-```text
-docs/architecture/api.md
-```
-
-For deployment architecture:
+Therefore:
 
 ```text
-docs/architecture/deployment.md
+OceanInfrastructureProject
+    owns
+        Site
 ```
 
-For event processing:
+rather than:
 
 ```text
-docs/architecture/event-model.md
+Site
+    owns
+        Project
 ```
+
+This principle guides the entire data model and future platform evolution.
